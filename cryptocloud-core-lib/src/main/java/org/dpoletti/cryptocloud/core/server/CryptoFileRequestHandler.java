@@ -1,9 +1,11 @@
 package org.dpoletti.cryptocloud.core.server;
 
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 import org.dpoletti.cryptocloud.core.exeption.ProtocolException;
+import org.dpoletti.cryptocloud.core.model.RequestHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +32,7 @@ public class CryptoFileRequestHandler implements Runnable {
 	}
 
 	private static final Logger logger 
-	  = LoggerFactory.getLogger(CryptoCloudFileServer.class);
+	  = LoggerFactory.getLogger(CryptoFileRequestHandler.class);
 	private static final int BUFFER_SIZE = 1024;
 	private static final char HEADER_END_CHAR= '\n';
 
@@ -54,12 +56,12 @@ public class CryptoFileRequestHandler implements Runnable {
 		
 	}
 	
-	private String readHeader(BufferedInputStream bif) throws Exception {
+	private String readHeader(BufferedInputStream bif) throws ProtocolException, IOException {
 		
-		 StringBuffer headerBuffer = new StringBuffer();
+		 StringBuilder headerBuffer = new StringBuilder();
 		 int  readInt;
 		 while(true) {
-			 readInt = bif.read();
+				readInt = bif.read();
 			 if(readInt==-1) {
 				 logger.error("Invalid file submition no complete header provided");
 			 }
@@ -77,6 +79,19 @@ public class CryptoFileRequestHandler implements Runnable {
 		 
 		 
 		
+	}
+
+	public RequestHeader parseHeader(String userNameFileName) {
+		String[] vals = userNameFileName.split("@");
+		RequestHeader rh = new RequestHeader();
+		if(vals.length>0) {
+			rh.setUsername(vals[0]);
+		}
+		
+		if(vals.length>1) {
+			rh.setFilename(vals[1]);
+		}
+		return rh;
 	}
 	
 
