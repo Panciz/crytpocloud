@@ -21,7 +21,11 @@ public class RequestHalderTest {
 //		
 		CryptoFileRequestHandler requestHandler = new CryptoFileRequestHandler(null);
 		RequestHeader requestHeader = requestHandler.parseHeader(userNameFileName);
+		
+		
+		
 		assertEquals(expRh, requestHeader);
+		
 		
 	}	
 	

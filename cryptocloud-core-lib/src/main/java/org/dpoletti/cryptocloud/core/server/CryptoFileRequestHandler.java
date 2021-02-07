@@ -2,6 +2,7 @@ package org.dpoletti.cryptocloud.core.server;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 import org.dpoletti.cryptocloud.core.exeption.ProtocolException;
@@ -22,8 +23,6 @@ public class CryptoFileRequestHandler implements Runnable {
 	//TODO 
 	
 	// Create success handler
-	//Header validation wih tests
-	// send ok if the header is validated
 	//Create output provider
 	
 	public CryptoFileRequestHandler(Socket socket) {
@@ -38,19 +37,26 @@ public class CryptoFileRequestHandler implements Runnable {
 
 	private static final int HEADER_MAX_SIZE= 500;
 
+	
+	private static final String HEADER_OK_MSG= "OK_HEADER";
+
 	@Override
 	public void run() {
 
 		logger.debug("Connection start");
 		
-		 try(BufferedInputStream bif = new BufferedInputStream(socket.getInputStream(),BUFFER_SIZE)){
+		 try(BufferedInputStream bif = new BufferedInputStream(socket.getInputStream(),BUFFER_SIZE);
+		           PrintWriter out = new PrintWriter(socket.getOutputStream(), true);){
 		
 			String header= readHeader(bif);
 			logger.debug("Header "+header);
+			RequestHeader rh = parseHeader(header);
+			//TODO header validation
+			out.println(HEADER_OK_MSG);
 			
 			
 		 } catch (Exception e) {
-			logger.error("Error while reading the file submition: "+e.getMessage());
+			logger.error("Error while receving file submition: "+e.getMessage());
 		 }
 		
 		
@@ -93,6 +99,7 @@ public class CryptoFileRequestHandler implements Runnable {
 		}
 		return rh;
 	}
+	
 	
 
 
