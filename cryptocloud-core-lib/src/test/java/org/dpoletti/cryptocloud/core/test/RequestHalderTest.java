@@ -22,7 +22,10 @@ public class RequestHalderTest {
 		
 		
 		assertEquals(expRh, requestHeader);
-		
+		assertEquals(userNameFileName,RequestHeader.serializeHeader(requestHeader) );
+		assertEquals(userNameFileName,RequestHeader.serializeHeader(expRh) );
+
+
 		
 	}	
 	
