@@ -3,7 +3,6 @@ package org.dpoletti.cryptocloud.core.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.dpoletti.cryptocloud.core.model.RequestHeader;
-import org.dpoletti.cryptocloud.core.server.CryptoCloudFileServer;
 import org.dpoletti.cryptocloud.core.server.CryptoFileRequestHandler;
 import org.junit.jupiter.api.Test;
 

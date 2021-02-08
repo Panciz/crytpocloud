@@ -26,7 +26,7 @@ public class CryptoFileRequestHandler implements Runnable {
 	private Socket socket;
 	
 	private StoreOutputProvider outprovider;
-	
+
 	//TODO
 	// Create success handler
 	
@@ -59,16 +59,19 @@ public class CryptoFileRequestHandler implements Runnable {
 			String header= readHeader(bis);
 			logger.debug("Header "+header);
 			RequestHeader rh = parseHeader(header);
+			long totalSize = -1l;
 			//TODO header validation
 			out.println(HEADER_OK_MSG);
 			try(BufferedOutputStream bos= new BufferedOutputStream(outprovider.getStoreOutputStream(rh))){
 			    logger.debug(rh+" Waiting for file ");
-				int totalSize =  storeFile(bis,bos);
+				 totalSize =  storeFile(bis,bos);
 			    logger.debug("File size  "+totalSize+" Stored");
 
 			}
 			out.println(END_OK_MSG);
-
+			logger.debug("Handling success ");
+			outprovider.endTransmissionSuccess(rh, totalSize);
+			
 		 } catch (Exception e) {
 			logger.error("Error while receving file submition: "+e.getMessage());
 		 }
@@ -102,11 +105,11 @@ public class CryptoFileRequestHandler implements Runnable {
 	}
 	
 	
-	private int storeFile(BufferedInputStream bif,BufferedOutputStream bof ) throws IOException {
+	private long storeFile(BufferedInputStream bif,BufferedOutputStream bof ) throws IOException {
 		
 	    int len;
 	    byte[] buff = new byte[BUFFER_SIZE];
-	    int totalSize=0;
+	    long totalSize=0;
 	    while ((len = bif.read(buff)) > 0) {
 	    	bof.write(buff, 0, len);
 	    	totalSize+=len;

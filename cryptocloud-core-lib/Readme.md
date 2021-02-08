@@ -12,7 +12,7 @@ To save file `file.bin` as `user` `fileName`
 
 
 ```
-java -jar original-cryptocloud-core-0.0.1-SNAPSHOT.jar 
+java -jar original-cryptocloud-core-0.0.1-SNAPSHOT.jar  destDir
 ```
 
 open  terminal 1

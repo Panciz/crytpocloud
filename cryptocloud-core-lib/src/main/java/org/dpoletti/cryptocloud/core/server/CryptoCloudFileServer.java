@@ -7,9 +7,7 @@ import java.rmi.ServerException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.dpoletti.cryptocloud.core.server.store.StoreOutputProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.dpoletti.cryptocloud.core.server.store.StoreOutputProviderFactory;
 
 
 /***
@@ -22,8 +20,7 @@ import org.slf4j.LoggerFactory;
  * */
 public class CryptoCloudFileServer {
 
-	private static final Logger logger 
-	  = LoggerFactory.getLogger(CryptoCloudFileServer.class);
+
 	//Limit the number of active connections 
 	private static final int MAX_ACTIVE_CONNECTIONS = 100;
 	private final int port;
@@ -31,14 +28,15 @@ public class CryptoCloudFileServer {
 	
 	private volatile boolean running;
 	private ServerSocket server;
-	private StoreOutputProvider outprovider;
+	private StoreOutputProviderFactory outproviderFactory;
 
-	public StoreOutputProvider getOutprovider() {
-		return outprovider;
+	
+	public StoreOutputProviderFactory getOutproviderFactory() {
+		return outproviderFactory;
 	}
 
-	public void setOutprovider(StoreOutputProvider outprovider) {
-		this.outprovider = outprovider;
+	public void setOutproviderFactory(StoreOutputProviderFactory outproviderFactory) {
+		this.outproviderFactory = outproviderFactory;
 	}
 
 	private ExecutorService threadPool = Executors.newFixedThreadPool(MAX_ACTIVE_CONNECTIONS);
@@ -51,7 +49,6 @@ public class CryptoCloudFileServer {
 	
 	public void startServer() throws ServerException {
 		
-		logger.info("FileServer Listen to port "+port);
 		running = true;
 		try {
 			
@@ -66,7 +63,7 @@ public class CryptoCloudFileServer {
 			
 			try {
 				Socket socket= server.accept();
-				threadPool.submit(new CryptoFileRequestHandler(socket,outprovider));
+				threadPool.submit(new CryptoFileRequestHandler(socket,outproviderFactory.getOutputProviderInstance()));
 				
 			} catch (IOException e) {
 				running =false;
