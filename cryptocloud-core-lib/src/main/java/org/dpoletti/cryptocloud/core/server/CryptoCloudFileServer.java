@@ -7,6 +7,7 @@ import java.rmi.ServerException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.dpoletti.cryptocloud.core.server.store.StoreOutputProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,16 @@ public class CryptoCloudFileServer {
 	
 	private volatile boolean running;
 	private ServerSocket server;
-	
+	private StoreOutputProvider outprovider;
+
+	public StoreOutputProvider getOutprovider() {
+		return outprovider;
+	}
+
+	public void setOutprovider(StoreOutputProvider outprovider) {
+		this.outprovider = outprovider;
+	}
+
 	private ExecutorService threadPool = Executors.newFixedThreadPool(MAX_ACTIVE_CONNECTIONS);
 	
 	
@@ -56,7 +66,7 @@ public class CryptoCloudFileServer {
 			
 			try {
 				Socket socket= server.accept();
-				threadPool.submit(new CryptoFileRequestHandler(socket));
+				threadPool.submit(new CryptoFileRequestHandler(socket,outprovider));
 				
 			} catch (IOException e) {
 				running =false;

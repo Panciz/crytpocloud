@@ -2,6 +2,11 @@ package org.dpoletti.cryptocloud.core.model;
 
 public class RequestHeader {
 	
+	@Override
+	public String toString() {
+		return "RequestHeader [username=" + username + ", filename=" + filename + "]";
+	}
+
 	private String username;
 	private String  filename;
 

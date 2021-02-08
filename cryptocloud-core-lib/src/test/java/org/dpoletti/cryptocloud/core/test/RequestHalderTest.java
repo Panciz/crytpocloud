@@ -19,7 +19,7 @@ public class RequestHalderTest {
 		expRh.setFilename("testfile.txt");
 //
 //		
-		CryptoFileRequestHandler requestHandler = new CryptoFileRequestHandler(null);
+		CryptoFileRequestHandler requestHandler = new CryptoFileRequestHandler(null,null);
 		RequestHeader requestHeader = requestHandler.parseHeader(userNameFileName);
 		
 		
