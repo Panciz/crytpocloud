@@ -1,4 +1,4 @@
-package org.dpoletti.cryptocloud.core.server;
+package org.dpoletti.cryptocloud.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -7,7 +7,7 @@ import java.rmi.ServerException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.dpoletti.cryptocloud.core.server.store.StoreOutputProviderFactory;
+import org.dpoletti.cryptocloud.server.store.StoreOutputProviderFactory;
 
 
 /***

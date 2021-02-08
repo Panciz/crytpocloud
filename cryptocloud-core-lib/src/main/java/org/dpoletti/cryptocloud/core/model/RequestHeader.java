@@ -1,7 +1,10 @@
 package org.dpoletti.cryptocloud.core.model;
 
+import java.util.Optional;
+
 public class RequestHeader {
-	
+	private static final String HEADER_SEP_CHAR= "@";
+
 	@Override
 	public String toString() {
 		return "RequestHeader [username=" + username + ", filename=" + filename + "]";
@@ -59,5 +62,25 @@ public class RequestHeader {
 	}
 
 	
+	public static String serializeHeader(RequestHeader header) {
+		return String.format("%s%s%s",
+				Optional.of(header.username).orElse(""),
+				HEADER_SEP_CHAR,
+				Optional.of(header.filename).orElse("")
+				);
+		
+	}
 	
+	public static RequestHeader parseHeader(String userNameFileName) {
+		String[] vals = userNameFileName.split(HEADER_SEP_CHAR);
+		RequestHeader rh = new RequestHeader();
+		if(vals.length>0) {
+			rh.setUsername(vals[0]);
+		}
+		
+		if(vals.length>1) {
+			rh.setFilename(vals[1]);
+		}
+		return rh;
+	}
 }

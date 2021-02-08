@@ -1,4 +1,4 @@
-package org.dpoletti.cryptocloud.core.server;
+package org.dpoletti.cryptocloud.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -8,7 +8,7 @@ import java.net.Socket;
 
 import org.dpoletti.cryptocloud.core.exeption.ProtocolException;
 import org.dpoletti.cryptocloud.core.model.RequestHeader;
-import org.dpoletti.cryptocloud.core.server.store.StoreOutputProvider;
+import org.dpoletti.cryptocloud.server.store.StoreOutputProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,6 @@ public class CryptoFileRequestHandler implements Runnable {
 	  = LoggerFactory.getLogger(CryptoFileRequestHandler.class);
 	private static final int BUFFER_SIZE = 1024;
 	private static final char HEADER_END_CHAR= '\n';
-	private static final String HEADER_SEP_CHAR= "@";
 
 	private static final int HEADER_MAX_SIZE= 500;
 
@@ -58,7 +57,7 @@ public class CryptoFileRequestHandler implements Runnable {
 		
 			String header= readHeader(bis);
 			logger.debug("Header "+header);
-			RequestHeader rh = parseHeader(header);
+			RequestHeader rh = RequestHeader.parseHeader(header);
 			long totalSize = -1l;
 			//TODO header validation
 			out.println(HEADER_OK_MSG);
@@ -119,18 +118,7 @@ public class CryptoFileRequestHandler implements Runnable {
 		return totalSize;
 	}
 
-	public RequestHeader parseHeader(String userNameFileName) {
-		String[] vals = userNameFileName.split(HEADER_SEP_CHAR);
-		RequestHeader rh = new RequestHeader();
-		if(vals.length>0) {
-			rh.setUsername(vals[0]);
-		}
-		
-		if(vals.length>1) {
-			rh.setFilename(vals[1]);
-		}
-		return rh;
-	}
+
 	
 	
 

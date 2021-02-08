@@ -3,7 +3,6 @@ package org.dpoletti.cryptocloud.core.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.dpoletti.cryptocloud.core.model.RequestHeader;
-import org.dpoletti.cryptocloud.core.server.CryptoFileRequestHandler;
 import org.junit.jupiter.api.Test;
 
 public class RequestHalderTest {
@@ -18,8 +17,7 @@ public class RequestHalderTest {
 		expRh.setFilename("testfile.txt");
 //
 //		
-		CryptoFileRequestHandler requestHandler = new CryptoFileRequestHandler(null,null);
-		RequestHeader requestHeader = requestHandler.parseHeader(userNameFileName);
+		RequestHeader requestHeader = RequestHeader.parseHeader(userNameFileName);
 		
 		
 		

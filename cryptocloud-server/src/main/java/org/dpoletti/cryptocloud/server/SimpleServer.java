@@ -1,11 +1,10 @@
-package org.dpoletti.cryptocloud.core;
+package org.dpoletti.cryptocloud.server;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.rmi.ServerException;
 
-import org.dpoletti.cryptocloud.core.server.CryptoCloudFileServer;
-import org.dpoletti.cryptocloud.core.server.store.StoreFileOutputProviderFactory;
+import org.dpoletti.cryptocloud.server.store.StoreFileOutputProviderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

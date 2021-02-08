@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.dpoletti.cryptocloud</groupId>
-	<artifactId>corelib</artifactId>
+	<artifactId>server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
@@ -12,8 +12,13 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
-	<dependencies>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.dpoletti.cryptocloud</groupId>
+			<artifactId>corelib</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
@@ -25,7 +30,6 @@
 			<artifactId>logback-classic</artifactId>
 			<version>1.2.3</version>
 		</dependency>
-
 	</dependencies>
 	<build>
 		<plugins>
@@ -43,4 +47,35 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>standalone</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<version>3.2.0</version>
+						<executions>
+							<!-- Attach the shade into the package phase -->
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+								<configuration>
+									<transformers>
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+											<mainClass>org.dpoletti.cryptocloud.server.SimpleServer</mainClass>
+										</transformer>
+									</transformers>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

@@ -1,4 +1,4 @@
-package org.dpoletti.cryptocloud.core.server.store;
+package org.dpoletti.cryptocloud.server.store;
 
 public interface StoreOutputProviderFactory {
 
