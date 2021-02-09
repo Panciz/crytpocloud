@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import org.dpoletti.cryptocloud.core.exeption.ProtocolException;
+import org.dpoletti.cryptocloud.core.model.ProtocolMessages;
 import org.dpoletti.cryptocloud.core.model.RequestHeader;
 import org.dpoletti.cryptocloud.server.store.StoreOutputProvider;
 import org.slf4j.Logger;
@@ -44,8 +45,7 @@ public class CryptoFileRequestHandler implements Runnable {
 	private static final int HEADER_MAX_SIZE= 500;
 
 	
-	private static final String HEADER_OK_MSG= "OK_HEADER";
-	private static final String END_OK_MSG= "OK_END";
+
 
 	@Override
 	public void run() {
@@ -60,14 +60,14 @@ public class CryptoFileRequestHandler implements Runnable {
 			RequestHeader rh = RequestHeader.parseHeader(header);
 			long totalSize = -1l;
 			//TODO header validation
-			out.println(HEADER_OK_MSG);
+			out.println(ProtocolMessages.HEADER_OK_MSG);
 			try(BufferedOutputStream bos= new BufferedOutputStream(outprovider.getStoreOutputStream(rh))){
 			    logger.debug(rh+" Waiting for file ");
 				 totalSize =  storeFile(bis,bos);
 			    logger.debug("File size  "+totalSize+" Stored");
 
 			}
-			out.println(END_OK_MSG);
+			out.println(ProtocolMessages.END_OK_MSG);
 			logger.debug("Handling success ");
 			outprovider.endTransmissionSuccess(rh, totalSize);
 			
