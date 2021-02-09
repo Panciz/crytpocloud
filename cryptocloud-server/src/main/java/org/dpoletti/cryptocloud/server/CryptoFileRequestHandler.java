@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import org.dpoletti.cryptocloud.core.exeption.ProtocolException;
+import org.dpoletti.cryptocloud.core.exeption.ServerException;
 import org.dpoletti.cryptocloud.core.exeption.StoreException;
 import org.dpoletti.cryptocloud.core.model.OperationType;
 import org.dpoletti.cryptocloud.core.model.ProtocolMessages;
@@ -66,32 +67,55 @@ public class CryptoFileRequestHandler implements Runnable {
 			case PUT:
 					long totalSize = recieveFile(bis,rh);
 					out.println(ProtocolMessages.END_OK_MSG);
-					logger.debug("Handling success ");
+					logger.debug(rh+" receive succesfully: "+totalSize+" bytes");
 					outprovider.endTransmissionSuccess(rh, totalSize);
+					logger.debug(rh+" store succesfully ");
+
 					break;
+			case GET:
+				long sentSize = sendFile(bos,rh);
+				logger.debug(rh+": senf successvully "+sentSize+" bytes");
+				out.println(ProtocolMessages.END_OK_MSG);
+				break;
 			default:
 					throw new ProtocolException("Operation not supported "+rh.getOpType());
 			}
-			if(rh.getOpType()==OperationType.PUT) {
-			
-			}
-
 			
 		 } catch (Exception e) {
-			logger.error("Error while receving file submition: "+e.getMessage());
+			logger.error("Error file transmission: "+e.getMessage());
 		 }
 		
 		
 	}
 	
-	private long recieveFile(BufferedInputStream bis,RequestHeader rh) throws IOException, StoreException {
+	private long recieveFile(BufferedInputStream bis,RequestHeader rh) throws  StoreException, ServerException {
 		try(BufferedOutputStream bos= new BufferedOutputStream(outprovider.getStoreOutputStream(rh))){
 		    logger.debug(rh+" Waiting for file ");
 			 long totalSize=  storeFile(bis,bos);
 		    logger.debug("File size  "+totalSize+" Stored");
 			return totalSize;
 
+		}catch(IOException io) {
+			throw new ServerException("Error while receiving file ",io.getCause());
+		}
+	}
+	
+	private long sendFile(BufferedOutputStream bos,RequestHeader rh) throws StoreException, ServerException {
+		try(BufferedInputStream bis= new BufferedInputStream(outprovider.getStoreInputStream(rh))){
+		    logger.debug(rh+" Sending file ");
+		    int len;
+		    byte[] buff = new byte[BUFFER_SIZE];
+		    long totalSize=0;
+		    while ((len = bis.read(buff)) > 0) {
+		    	bos.write(buff, 0, len);
+		    	totalSize+=len;
+		    	
+		    }
+		    bos.flush();
+			return totalSize;
 
+		} catch(IOException io) {
+			throw new ServerException("Error while sending file ",io.getCause());
 		}
 	}
 	

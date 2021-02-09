@@ -4,8 +4,10 @@ import static java.nio.file.StandardCopyOption.ATOMIC_MOVE;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,11 +54,11 @@ public class StoreFileOutputStreamProvider implements StoreOutputProvider{
 		
 	}
 	@Override
-	public OutputStream getStoreInputStream(RequestHeader rh) throws StoreException  {
+	public InputStream getStoreInputStream(RequestHeader rh) throws StoreException  {
 		try {
 			Path readFile = Paths.get(destDir.toFile().getAbsolutePath()+File.separator+rh.getFilename());
 			logger.debug("delivering file  "+readFile.toAbsolutePath());
-			return new FileOutputStream(readFile.toFile());
+			return new FileInputStream(readFile.toFile());
 			
 			
 		} catch (IOException e) {

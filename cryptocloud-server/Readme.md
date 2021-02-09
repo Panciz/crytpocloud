@@ -12,7 +12,7 @@ To save file `file.bin` as `user` `fileName`
 
 
 ```
-java -jar original-cryptocloud-core-0.0.1-SNAPSHOT.jar  destDir
+java -jar server-0.0.1-SNAPSHOT.jar <destDir>
 ```
 
 open  terminal 1
@@ -21,7 +21,7 @@ open  terminal 1
 > mkfifo /tmp/fifo
 > nc -v -n <>/tmp/fifo 127.0.0.1 9000 &
 > ncpid=$!
-> echo user@fileName > /tmp/fifo
+> echo PUT@user@fileName > /tmp/fifo
 > cat file.bin > /tmp/fifo
 > kill -9 $ncpid
 ```

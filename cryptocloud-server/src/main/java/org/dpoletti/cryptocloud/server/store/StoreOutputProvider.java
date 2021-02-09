@@ -1,5 +1,6 @@
 package org.dpoletti.cryptocloud.server.store;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.dpoletti.cryptocloud.core.exeption.StoreException;
@@ -18,5 +19,5 @@ public interface StoreOutputProvider {
 	 */
 	OutputStream getStoreOutputStream(RequestHeader rh) throws StoreException;
   void endTransmissionSuccess(RequestHeader rh, long fileZise) throws StoreException;
-OutputStream getStoreInputStream(RequestHeader rh) throws StoreException;
+InputStream getStoreInputStream(RequestHeader rh) throws StoreException;
 }

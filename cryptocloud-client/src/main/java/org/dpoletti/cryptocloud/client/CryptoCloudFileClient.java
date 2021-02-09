@@ -76,9 +76,9 @@ public class CryptoCloudFileClient {
     	    	   rh.setOpType(OperationType.GET);
     	    	   logger.debug("Sending header "+rh);
     	    	   sendHeader(rh, bos, reader);
-    	    	   logger.debug("Starting file transimission "+rh);
+    	    	   logger.debug("Revceiving file "+rh);
     	    	   long bytes =  recieveBinaryFile( bis);
-    	    	   logger.debug("Sent "+bytes+" bytes");
+    	    	   logger.debug("Recieved "+bytes+" bytes");
 
 	       }catch(Exception e ) {
 	    	   logger.error("Error connecting "+e.getMessage());
