@@ -28,8 +28,6 @@ public class CryptoFileRequestHandler implements Runnable {
 	
 	private StoreOutputProvider outprovider;
 
-	//TODO
-	// Create success handler
 	
 	public CryptoFileRequestHandler(Socket socket,StoreOutputProvider outprovider) {
 		super();
@@ -40,7 +38,6 @@ public class CryptoFileRequestHandler implements Runnable {
 	private static final Logger logger 
 	  = LoggerFactory.getLogger(CryptoFileRequestHandler.class);
 	private static final int BUFFER_SIZE = 1024;
-	private static final char HEADER_END_CHAR= '\n';
 
 	private static final int HEADER_MAX_SIZE= 500;
 
@@ -90,7 +87,7 @@ public class CryptoFileRequestHandler implements Runnable {
 
 			 }
 			 char readChar = (char)readInt;
-			 if(readChar==HEADER_END_CHAR){
+			 if(readChar==ProtocolMessages.HEADER_END_CHAR){
 				 break;
 			 }
 			 headerBuffer.append(readChar);

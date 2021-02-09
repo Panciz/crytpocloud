@@ -4,4 +4,6 @@ public class ProtocolMessages {
 
 	public static final String HEADER_OK_MSG= "OK_HEADER";
 	public static final String END_OK_MSG= "OK_END";
+	public static final char HEADER_END_CHAR= '\n';
+
 }
