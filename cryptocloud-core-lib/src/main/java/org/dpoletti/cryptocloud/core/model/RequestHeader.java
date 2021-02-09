@@ -12,6 +12,7 @@ public class RequestHeader {
 
 	private String username;
 	private String  filename;
+	private OperationType opType;
 
 
 	public void setUsername(String username) {
@@ -63,7 +64,9 @@ public class RequestHeader {
 
 	
 	public static String serializeHeader(RequestHeader header) {
-		return String.format("%s%s%s",
+		return String.format("%s%s%s%s%s",
+				Optional.of(header.opType.toString()).orElse(""),
+				HEADER_SEP_CHAR,
 				Optional.of(header.username).orElse(""),
 				HEADER_SEP_CHAR,
 				Optional.of(header.filename).orElse("")
@@ -75,12 +78,23 @@ public class RequestHeader {
 		String[] vals = userNameFileName.split(HEADER_SEP_CHAR);
 		RequestHeader rh = new RequestHeader();
 		if(vals.length>0) {
-			rh.setUsername(vals[0]);
+			rh.setOpType(OperationType.valueOf(vals[0]));
+		}
+		if(vals.length>1) {
+			rh.setUsername(vals[1]);
 		}
 		
-		if(vals.length>1) {
-			rh.setFilename(vals[1]);
+		if(vals.length>2) {
+			rh.setFilename(vals[2]);
 		}
 		return rh;
+	}
+
+	public OperationType getOpType() {
+		return opType;
+	}
+
+	public void setOpType(OperationType opType) {
+		this.opType = opType;
 	}
 }
