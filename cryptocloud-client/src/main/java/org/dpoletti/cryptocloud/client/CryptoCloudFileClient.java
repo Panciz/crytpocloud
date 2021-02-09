@@ -52,7 +52,7 @@ public class CryptoCloudFileClient {
     	   logger.debug("Sending header "+rh);
     	   sendHeader(rh, bos, reader);
     	   logger.debug("Starting file transimission "+rh);
-    	   long bytes =  sendBinaryfile( bos, reader);
+    	   long bytes =  sendBinaryfile( bos);
     	   logger.debug("Sent "+bytes+" bytes");
     	  // String result = reader.readLine();
     	  // logger.debug("resutl "+result);
@@ -64,7 +64,7 @@ public class CryptoCloudFileClient {
     }
 
     
-    private void sendHeader(RequestHeader rh,BufferedOutputStream bos,BufferedReader reader) throws Exception {
+    private void sendHeader(RequestHeader rh,BufferedOutputStream bos,BufferedReader reader) throws ClientException, ProtocolException {
     	try {
 			bos.write(RequestHeader.serializeHeader(rh).getBytes());
 			bos.write(ProtocolMessages.HEADER_END_CHAR);
@@ -79,7 +79,7 @@ public class CryptoCloudFileClient {
 		}
     }
     
-    private long sendBinaryfile(BufferedOutputStream bos,BufferedReader reader) throws Exception {
+    private long sendBinaryfile(BufferedOutputStream bos) throws ClientException {
     	try (BufferedInputStream bif = new BufferedInputStream(clientStoreProvider.getSendFileStream())){		
 		    int len;
 		    byte[] buff = new byte[BUFFER_SIZE];
