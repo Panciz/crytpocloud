@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import org.dpoletti.cryptocloud.core.exeption.ProtocolException;
+import org.dpoletti.cryptocloud.core.exeption.StoreException;
+import org.dpoletti.cryptocloud.core.model.OperationType;
 import org.dpoletti.cryptocloud.core.model.ProtocolMessages;
 import org.dpoletti.cryptocloud.core.model.RequestHeader;
 import org.dpoletti.cryptocloud.server.store.StoreOutputProvider;
@@ -50,29 +52,47 @@ public class CryptoFileRequestHandler implements Runnable {
 		logger.debug("Connection start");
 		
 		 try(BufferedInputStream bis = new BufferedInputStream(socket.getInputStream(),BUFFER_SIZE);
+				 BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream(),BUFFER_SIZE);
 		           PrintWriter out = new PrintWriter(socket.getOutputStream(), true);){
 		
 			String header= readHeader(bis);
 			logger.debug("Header "+header);
 			RequestHeader rh = RequestHeader.parseHeader(header);
-			long totalSize = -1l;
 			//TODO header validation
 			out.println(ProtocolMessages.HEADER_OK_MSG);
-			try(BufferedOutputStream bos= new BufferedOutputStream(outprovider.getStoreOutputStream(rh))){
-			    logger.debug(rh+" Waiting for file ");
-				 totalSize =  storeFile(bis,bos);
-			    logger.debug("File size  "+totalSize+" Stored");
-
+			
+			
+			switch(rh.getOpType()) {
+			case PUT:
+					long totalSize = recieveFile(bis,rh);
+					out.println(ProtocolMessages.END_OK_MSG);
+					logger.debug("Handling success ");
+					outprovider.endTransmissionSuccess(rh, totalSize);
+					break;
+			default:
+					throw new ProtocolException("Operation not supported "+rh.getOpType());
 			}
-			out.println(ProtocolMessages.END_OK_MSG);
-			logger.debug("Handling success ");
-			outprovider.endTransmissionSuccess(rh, totalSize);
+			if(rh.getOpType()==OperationType.PUT) {
+			
+			}
+
 			
 		 } catch (Exception e) {
 			logger.error("Error while receving file submition: "+e.getMessage());
 		 }
 		
 		
+	}
+	
+	private long recieveFile(BufferedInputStream bis,RequestHeader rh) throws IOException, StoreException {
+		try(BufferedOutputStream bos= new BufferedOutputStream(outprovider.getStoreOutputStream(rh))){
+		    logger.debug(rh+" Waiting for file ");
+			 long totalSize=  storeFile(bis,bos);
+		    logger.debug("File size  "+totalSize+" Stored");
+			return totalSize;
+
+
+		}
 	}
 	
 	private String readHeader(BufferedInputStream bif) throws ProtocolException, IOException {

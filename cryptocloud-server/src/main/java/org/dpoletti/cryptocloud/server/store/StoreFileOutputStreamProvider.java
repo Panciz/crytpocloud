@@ -51,7 +51,19 @@ public class StoreFileOutputStreamProvider implements StoreOutputProvider{
 		}
 		
 	}
-
+	@Override
+	public OutputStream getStoreInputStream(RequestHeader rh) throws StoreException  {
+		try {
+			Path readFile = Paths.get(destDir.toFile().getAbsolutePath()+File.separator+rh.getFilename());
+			logger.debug("delivering file  "+readFile.toAbsolutePath());
+			return new FileOutputStream(readFile.toFile());
+			
+			
+		} catch (IOException e) {
+			throw new StoreException("Error writing temp file",e.getCause());
+		}
+		
+	}
 	@Override
 	public void endTransmissionSuccess(RequestHeader rh, long fileZise) throws StoreException {
 		

@@ -3,6 +3,7 @@ package org.dpoletti.cryptocloud.client;
 import java.io.IOException;
 
 import org.dpoletti.cryptocloud.client.store.FilesystemClientStreamProviderFactory;
+import org.dpoletti.cryptocloud.core.model.OperationType;
 
 public class CryptoCloudSimpleClient {
 
@@ -12,20 +13,27 @@ public class CryptoCloudSimpleClient {
 	
 		
 		//TODO args validation
-		if(args.length<4) {
-			System.out.println("CryptoCloudSimpleClient <file> <user> <addr> <port> ");
+		//TODO use properties file as default
+		if(args.length<5) {
+			System.out.println("CryptoCloudSimpleClient [GET|PUT] <file> <user> <addr> <port> ");
 			System.exit(-1);
 			return;
 		}
 		
-		String file = args[0];
-		String username = args[1];
-		String addr = args[2];
-		String port = args[3];
-
+		OperationType operation = OperationType.valueOf(args[0]);
+		String file = args[1];
+		String username = args[2];
+		String addr = args[3];
+		String port = args[4];
 		FilesystemClientStreamProviderFactory fact = new FilesystemClientStreamProviderFactory();
-		CryptoCloudFileClient fc = new CryptoCloudFileClient(addr,Integer.valueOf(port), fact.getClientStoreProvider(username, file));
-		fc.sendFile();
+
+		if(operation==OperationType.PUT){
+			CryptoCloudFileClient fc = new CryptoCloudFileClient(
+				addr,
+				Integer.valueOf(port), 
+				fact.getClientStoreProvider(username, file));
+			fc.sendFile();
+		}
 	}
 
 }

@@ -11,6 +11,7 @@ import java.net.Socket;
 import org.dpoletti.cryptocloud.client.store.ClientStreamProvider;
 import org.dpoletti.cryptocloud.core.exeption.ClientException;
 import org.dpoletti.cryptocloud.core.exeption.ProtocolException;
+import org.dpoletti.cryptocloud.core.model.OperationType;
 import org.dpoletti.cryptocloud.core.model.ProtocolMessages;
 import org.dpoletti.cryptocloud.core.model.RequestHeader;
 import org.slf4j.Logger;
@@ -49,6 +50,7 @@ public class CryptoCloudFileClient {
     	 ){
     	   
     	   RequestHeader rh = clientStoreProvider.getRequestHeader();
+    	   rh.setOpType(OperationType.PUT);
     	   logger.debug("Sending header "+rh);
     	   sendHeader(rh, bos, reader);
     	   logger.debug("Starting file transimission "+rh);
@@ -63,8 +65,45 @@ public class CryptoCloudFileClient {
   
     }
 
+    public void recieveFile(){
+    	 try(Socket clientSocket = new Socket(addr,port);
+    	    	   BufferedOutputStream bos = new BufferedOutputStream(clientSocket.getOutputStream());
+    	    	   BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    	    	   BufferedInputStream bis = new BufferedInputStream(clientSocket.getInputStream()))
+    	    	 {
+    	    	   
+    	    	   RequestHeader rh = clientStoreProvider.getRequestHeader();
+    	    	   rh.setOpType(OperationType.GET);
+    	    	   logger.debug("Sending header "+rh);
+    	    	   sendHeader(rh, bos, reader);
+    	    	   logger.debug("Starting file transimission "+rh);
+    	    	   long bytes =  recieveBinaryFile( bis);
+    	    	   logger.debug("Sent "+bytes+" bytes");
+
+	       }catch(Exception e ) {
+	    	   logger.error("Error connecting "+e.getMessage());
+	       }
+    }
     
-    private void sendHeader(RequestHeader rh,BufferedOutputStream bos,BufferedReader reader) throws ClientException, ProtocolException {
+    private long recieveBinaryFile(BufferedInputStream bis) throws ClientException {
+    	try (BufferedOutputStream bos = new BufferedOutputStream(clientStoreProvider.getRecieveFileStream())){		
+		    int len;
+		    byte[] buff = new byte[BUFFER_SIZE];
+		    long totalSize=0;
+		    while ((len = bis.read(buff)) > 0) {
+		    	bos.write(buff, 0, len);
+		    	totalSize+=len;
+		    	
+		    }
+		    bos.flush();
+			return totalSize;
+ 
+		} catch (IOException e) {
+			throw new ClientException("Error reading file ",e.getCause() );
+		}
+	}
+
+	private void sendHeader(RequestHeader rh,BufferedOutputStream bos,BufferedReader reader) throws ClientException, ProtocolException {
     	try {
 			bos.write(RequestHeader.serializeHeader(rh).getBytes());
 			bos.write(ProtocolMessages.HEADER_END_CHAR);
@@ -93,7 +132,7 @@ public class CryptoCloudFileClient {
 			return totalSize;
  
 		} catch (IOException e) {
-			throw new ClientException("Error sending header ",e.getCause() );
+			throw new ClientException("Error sending file ",e.getCause() );
 		}
     }
   

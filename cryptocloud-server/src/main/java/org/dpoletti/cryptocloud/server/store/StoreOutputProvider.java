@@ -18,4 +18,5 @@ public interface StoreOutputProvider {
 	 */
 	OutputStream getStoreOutputStream(RequestHeader rh) throws StoreException;
   void endTransmissionSuccess(RequestHeader rh, long fileZise) throws StoreException;
+OutputStream getStoreInputStream(RequestHeader rh) throws StoreException;
 }
