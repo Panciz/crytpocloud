@@ -46,13 +46,13 @@ public class CryptoCloudFileClient {
     public void sendFile() throws IOException {
        try(Socket clientSocket = new Socket(addr,port);
     	   BufferedOutputStream bos = new BufferedOutputStream(clientSocket.getOutputStream());
-    	   BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))
+    	   BufferedInputStream bis = new BufferedInputStream(clientSocket.getInputStream())
     	 ){
     	   
     	   RequestHeader rh = clientStoreProvider.getRequestHeader();
     	   rh.setOpType(OperationType.PUT);
     	   logger.debug("Sending header "+rh);
-    	   sendHeader(rh, bos, reader);
+    	   sendHeader(rh, bos, bis);
     	   logger.debug("Starting file transimission "+rh);
     	   long bytes =  sendBinaryfile( bos);
     	   logger.debug("Sent "+bytes+" bytes");
@@ -68,14 +68,13 @@ public class CryptoCloudFileClient {
     public void recieveFile(){
     	 try(Socket clientSocket = new Socket(addr,port);
     	    	   BufferedOutputStream bos = new BufferedOutputStream(clientSocket.getOutputStream());
-    	    	   BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     	    	   BufferedInputStream bis = new BufferedInputStream(clientSocket.getInputStream()))
     	    	 {
     	    	   
     	    	   RequestHeader rh = clientStoreProvider.getRequestHeader();
     	    	   rh.setOpType(OperationType.GET);
     	    	   logger.debug("Sending header "+rh);
-    	    	   sendHeader(rh, bos, reader);
+    	    	   sendHeader(rh, bos, bis);
     	    	   logger.debug("Revceiving file "+rh);
     	    	   long bytes =  recieveBinaryFile( bis);
     	    	   logger.debug("Recieved "+bytes+" bytes");
@@ -84,6 +83,27 @@ public class CryptoCloudFileClient {
 	    	   logger.error("Error connecting "+e.getMessage());
 	       }
     }
+    
+    private String readResponse(BufferedInputStream bif) throws ProtocolException, IOException {
+		
+		 StringBuilder headerBuffer = new StringBuilder();
+		 int  readInt;
+		 while(true) {
+				readInt = bif.read();
+			 if(readInt==-1) {
+				 logger.error("Invalid file submition no complete header provided");
+				 throw new ProtocolException("Invalid file submition no complete header provided");
+
+			 }
+			 char readChar = (char)readInt;
+			 if(readChar==ProtocolMessages.HEADER_END_CHAR){
+				 break;
+			 }
+			 headerBuffer.append(readChar);
+		 }
+		return headerBuffer.toString(); 
+		
+	}
     
     private long recieveBinaryFile(BufferedInputStream bis) throws ClientException {
     	try (BufferedOutputStream bos = new BufferedOutputStream(clientStoreProvider.getRecieveFileStream())){		
@@ -103,13 +123,12 @@ public class CryptoCloudFileClient {
 		}
 	}
 
-	private void sendHeader(RequestHeader rh,BufferedOutputStream bos,BufferedReader reader) throws ClientException, ProtocolException {
+	private void sendHeader(RequestHeader rh,BufferedOutputStream bos,BufferedInputStream bis) throws ClientException, ProtocolException {
     	try {
 			bos.write(RequestHeader.serializeHeader(rh).getBytes());
 			bos.write(ProtocolMessages.HEADER_END_CHAR);
-
 			bos.flush();
-			String res = reader.readLine();
+			String res = readResponse(bis);
 			if(!ProtocolMessages.HEADER_OK_MSG.equals(res)) {
 				throw new ProtocolException("Not valid header: "+res);
 			}
