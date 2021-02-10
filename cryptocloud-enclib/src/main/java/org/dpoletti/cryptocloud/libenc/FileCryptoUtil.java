@@ -92,7 +92,7 @@ public class FileCryptoUtil {
         String content;
 
         try (FileInputStream fileIn = new FileInputStream(fileName)) {
-            byte[] fileIv = new byte[16];
+            byte[] fileIv = new byte[KEY_SIZE];
             fileIn.read(fileIv);
             cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(fileIv));
 
@@ -113,6 +113,22 @@ public class FileCryptoUtil {
         }
         return content;
     }
-   
-   
+
+
+public CipherOutputStream getOutputStream(FileOutputStream fos) throws InvalidKeyException, IOException {
+    cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+    byte[] iv = cipher.getIV();
+    fos.write(iv);
+    return new CipherOutputStream(fos, cipher);
+}
+
+
+public CipherInputStream getInputStream(FileInputStream fis) throws IOException, InvalidKeyException, InvalidAlgorithmParameterException {
+	   byte[] fileIv = new byte[KEY_SIZE];
+	   fis.read(fileIv);
+       cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(fileIv));
+	return new CipherInputStream(fis, cipher);
+}
+ 
+
 }
