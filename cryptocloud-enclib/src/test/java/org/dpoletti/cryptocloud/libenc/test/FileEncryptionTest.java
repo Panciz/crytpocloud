@@ -63,7 +63,7 @@ public class FileEncryptionTest {
 
 	    
 	    FileCryptoUtil fileEncrypterDecrypter
-	      = new FileCryptoUtil(secretKey, "AES/CBC/PKCS5Padding");
+	      = new FileCryptoUtil(secretKey);
 	    fileEncrypterDecrypter.encrypt(originalContent,TEST_FILE_NAME);
 
 	    String decryptedContent = fileEncrypterDecrypter.decrypt(TEST_FILE_NAME);
@@ -86,16 +86,9 @@ public class FileEncryptionTest {
 	public void encrypt() throws InvalidKeyException, IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchProviderException {
 		cleanExistingPersistingFile();
 		String originalContent =TEST_PERSISTANCE_TEXT;
-	    SecretKey secretKey = KeyGenerator.getInstance("AES").generateKey();
-	    byte[] keyBytes =  secretKey.getEncoded();
-	    
-	    try(FileOutputStream file = new FileOutputStream(new File(TEST_PERSISTANCE_KEY_FILE_NAME))){
-	    	file.write(keyBytes);
-	    	file.flush();
-	    }
-	    
+	  
 	    FileCryptoUtil fileEncrypterDecrypter
-	      = new FileCryptoUtil(secretKey, "AES/CBC/PKCS5Padding");
+	      = new FileCryptoUtil(new File(TEST_PERSISTANCE_KEY_FILE_NAME));
 	    fileEncrypterDecrypter.encrypt(originalContent, TEST_PERSISTANCE_FILE_NAME);
 
 	   
@@ -115,16 +108,8 @@ public class FileEncryptionTest {
 	public void decrypt() throws InvalidKeyException, IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchProviderException {
 		
 		String originalContent =TEST_PERSISTANCE_TEXT;
-	    byte[] keyBytes = new byte[16];
-	    try(FileInputStream fis = new FileInputStream(new File(TEST_PERSISTANCE_KEY_FILE_NAME))) {
-	    	fis.read(keyBytes);
-	    }
-
-	    SecretKey secretKey =  new SecretKeySpec(keyBytes, "AES");
-;
-
 	    FileCryptoUtil fileEncrypterDecrypter
-	      = new FileCryptoUtil(secretKey, "AES/CBC/PKCS5Padding");
+	      = new FileCryptoUtil(new File(TEST_PERSISTANCE_KEY_FILE_NAME));
 	    String decryptedContent = fileEncrypterDecrypter.decrypt(TEST_PERSISTANCE_FILE_NAME);
 	    assertEquals(decryptedContent, originalContent);
 
