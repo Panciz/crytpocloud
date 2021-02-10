@@ -75,7 +75,6 @@ public class CryptoFileRequestHandler implements Runnable {
 			case GET:
 				long sentSize = sendFile(bos,rh);
 				logger.debug(rh+": senf successvully "+sentSize+" bytes");
-				out.println(ProtocolMessages.END_OK_MSG);
 				break;
 			default:
 					throw new ProtocolException("Operation not supported "+rh.getOpType());
