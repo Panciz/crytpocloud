@@ -14,3 +14,9 @@ Retrieve  file `test-image.jpg` and store it in directory `testdir/recf/`
 ```
 java -jar target/client-0.0.1-SNAPSHOT.jar GET testdir/recf/test-image.jpg dpoletti 127.0.0.1 9000
 ```
+
+check the result with 
+
+```
+md5sum -c testdir/recf/test-image.md5
+```

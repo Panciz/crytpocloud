@@ -9,7 +9,6 @@ import java.net.Socket;
 import org.dpoletti.cryptocloud.core.exeption.ProtocolException;
 import org.dpoletti.cryptocloud.core.exeption.ServerException;
 import org.dpoletti.cryptocloud.core.exeption.StoreException;
-import org.dpoletti.cryptocloud.core.model.OperationType;
 import org.dpoletti.cryptocloud.core.model.ProtocolMessages;
 import org.dpoletti.cryptocloud.core.model.RequestHeader;
 import org.dpoletti.cryptocloud.server.store.StoreOutputProvider;
@@ -18,11 +17,19 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * It manages the incoming files.
+ * It manages the incoming and aoutcoming file.
  * 
- * 1. It waits for the header in the format <username>@<filename>
+ * PROTOCOL for INCOMING file
+ * 
+ * 1. It waits for the header in the format PUT@<username>@<filename>
  * 2. It sends OK_HEADER and it waits for the file
  * 3. When the file is received it send OK_END and it closes the socket
+ * 
+ * PROTOCOL for OUTCOMING file 
+ * 
+ * 1. It waits for the header in the format GET@<username>@<filename>
+ * 2. It sends OK_HEADER and it waits for the file
+ * 3. When the file is sent it closes the socket
  * 
  * */
 public class CryptoFileRequestHandler implements Runnable {

@@ -2,11 +2,8 @@ package org.dpoletti.cryptocloud.client;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
-
 
 import org.dpoletti.cryptocloud.client.store.ClientStreamProvider;
 import org.dpoletti.cryptocloud.core.exeption.ClientException;
