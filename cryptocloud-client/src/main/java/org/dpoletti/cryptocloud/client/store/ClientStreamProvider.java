@@ -1,16 +1,16 @@
 package org.dpoletti.cryptocloud.client.store;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.dpoletti.cryptocloud.core.exeption.ProviderStreamGenerationException;
 import org.dpoletti.cryptocloud.core.model.RequestHeader;
 
 public interface ClientStreamProvider {
 	
 	RequestHeader getRequestHeader();
 	
-	InputStream getSendFileStream() throws FileNotFoundException;
+	InputStream getSendFileStream() throws  ProviderStreamGenerationException;
 
-	OutputStream getRecieveFileStream() throws FileNotFoundException;
+	OutputStream getRecieveFileStream() throws ProviderStreamGenerationException;
 }

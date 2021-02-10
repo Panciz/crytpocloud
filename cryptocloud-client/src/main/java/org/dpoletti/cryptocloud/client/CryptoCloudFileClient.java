@@ -8,6 +8,7 @@ import java.net.Socket;
 import org.dpoletti.cryptocloud.client.store.ClientStreamProvider;
 import org.dpoletti.cryptocloud.core.exeption.ClientException;
 import org.dpoletti.cryptocloud.core.exeption.ProtocolException;
+import org.dpoletti.cryptocloud.core.exeption.ProviderStreamGenerationException;
 import org.dpoletti.cryptocloud.core.model.OperationType;
 import org.dpoletti.cryptocloud.core.model.ProtocolMessages;
 import org.dpoletti.cryptocloud.core.model.RequestHeader;
@@ -102,7 +103,7 @@ public class CryptoCloudFileClient {
 		
 	}
     
-    private long recieveBinaryFile(BufferedInputStream bis) throws ClientException {
+    private long recieveBinaryFile(BufferedInputStream bis) throws ClientException, ProviderStreamGenerationException {
     	try (BufferedOutputStream bos = new BufferedOutputStream(clientStoreProvider.getRecieveFileStream())){		
 		    int len;
 		    byte[] buff = new byte[BUFFER_SIZE];
@@ -134,7 +135,7 @@ public class CryptoCloudFileClient {
 		}
     }
     
-    private long sendBinaryfile(BufferedOutputStream bos) throws ClientException {
+    private long sendBinaryfile(BufferedOutputStream bos) throws ClientException, ProviderStreamGenerationException {
     	try (BufferedInputStream bif = new BufferedInputStream(clientStoreProvider.getSendFileStream())){		
 		    int len;
 		    byte[] buff = new byte[BUFFER_SIZE];

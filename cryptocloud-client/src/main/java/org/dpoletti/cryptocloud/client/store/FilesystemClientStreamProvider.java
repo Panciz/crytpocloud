@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.dpoletti.cryptocloud.core.exeption.ProviderStreamGenerationException;
 import org.dpoletti.cryptocloud.core.model.RequestHeader;
 
 public class FilesystemClientStreamProvider implements ClientStreamProvider {
@@ -28,12 +29,20 @@ public class FilesystemClientStreamProvider implements ClientStreamProvider {
 
 
 	@Override
-	public InputStream getSendFileStream() throws FileNotFoundException {
-		return new FileInputStream(path.toFile());
+	public InputStream getSendFileStream() throws ProviderStreamGenerationException {
+		try {
+			return new FileInputStream(path.toFile());
+		} catch (FileNotFoundException e) {
+			throw new ProviderStreamGenerationException("Error generating input Stream "+e.getMessage(), e);
+		}
 	}
 	@Override
-	public OutputStream getRecieveFileStream() throws FileNotFoundException {
-		return new FileOutputStream(path.toFile());
+	public OutputStream getRecieveFileStream() throws ProviderStreamGenerationException {
+		try {
+			return new FileOutputStream(path.toFile());
+		} catch (FileNotFoundException e) {
+			throw new ProviderStreamGenerationException("Error generating output Stream "+e.getMessage(), e);
+		}
 	}
 
 	@Override
