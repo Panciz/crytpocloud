@@ -3,6 +3,8 @@ package org.dpoletti.cryptocloud.client;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 import org.dpoletti.cryptocloud.client.store.ClientStreamProvider;
@@ -54,9 +56,6 @@ public class CryptoCloudFileClient {
     	   logger.debug("Starting file transimission "+rh);
     	   long bytes =  sendBinaryfile( bos);
     	   logger.debug("Sent "+bytes+" bytes");
-    	  // String result = reader.readLine();
-    	  // logger.debug("resutl "+result);
-    	   	//TODO read OK response
        }catch(Exception e ) {
     	   logger.error("Error connecting "+e.getMessage());
        }
@@ -104,11 +103,14 @@ public class CryptoCloudFileClient {
 	}
     
     private long recieveBinaryFile(BufferedInputStream bis) throws ClientException, ProviderStreamGenerationException {
-    	try (BufferedOutputStream bos = new BufferedOutputStream(clientStoreProvider.getRecieveFileStream())){		
+    	try (BufferedOutputStream bos = new BufferedOutputStream(clientStoreProvider.getOutputNetworkStream());
+    			InputStream is = clientStoreProvider.getFilterRecieveNetwordStream(bis)
+    			
+    			){		
 		    int len;
 		    byte[] buff = new byte[BUFFER_SIZE];
 		    long totalSize=0;
-		    while ((len = bis.read(buff)) > 0) {
+		    while ((len = is.read(buff)) > 0) {
 		    	bos.write(buff, 0, len);
 		    	totalSize+=len;
 		    	
@@ -117,7 +119,7 @@ public class CryptoCloudFileClient {
 			return totalSize;
  
 		} catch (IOException e) {
-			throw new ClientException("Error reading file ",e.getCause() );
+			throw new ClientException("Error reading file "+e.getMessage(),e.getCause() );
 		}
 	}
 
@@ -131,25 +133,26 @@ public class CryptoCloudFileClient {
 				throw new ProtocolException("Not valid header: "+res);
 			}
 		} catch (IOException e) {
-			throw new ClientException("Error sending header ",e.getCause() );
+			throw new ClientException("Error sending header  "+e.getMessage(),e.getCause() );
 		}
     }
     
     private long sendBinaryfile(BufferedOutputStream bos) throws ClientException, ProviderStreamGenerationException {
-    	try (BufferedInputStream bif = new BufferedInputStream(clientStoreProvider.getSendFileStream())){		
+    	try (BufferedInputStream bif = new BufferedInputStream(clientStoreProvider.getInputStoreStream());
+    			OutputStream out = clientStoreProvider.getFilterOutputStoreStream(bos)){		
 		    int len;
 		    byte[] buff = new byte[BUFFER_SIZE];
 		    long totalSize=0;
 		    while ((len = bif.read(buff)) > 0) {
-		    	bos.write(buff, 0, len);
+		    	out.write(buff, 0, len);
 		    	totalSize+=len;
 		    	
 		    }
-		    bos.flush();
+		    out.flush();
 			return totalSize;
  
 		} catch (IOException e) {
-			throw new ClientException("Error sending file ",e.getCause() );
+			throw new ClientException("Error sending file "+e.getMessage(),e.getCause() );
 		}
     }
   

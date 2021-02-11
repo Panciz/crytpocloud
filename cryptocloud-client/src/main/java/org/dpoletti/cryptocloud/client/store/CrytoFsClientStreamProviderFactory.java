@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.Security;
 
 import javax.crypto.NoSuchPaddingException;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.dpoletti.cryptocloud.core.exeption.ProviderGenerationException;
 
 public class CrytoFsClientStreamProviderFactory implements ClientStreamProviderFactory {
@@ -17,6 +19,7 @@ public class CrytoFsClientStreamProviderFactory implements ClientStreamProviderF
 	public CrytoFsClientStreamProviderFactory(File keyFile) {
 		super();
 		this.keyFile = keyFile;
+		Security.addProvider(new BouncyCastleProvider());
 	}
 
 

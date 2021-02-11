@@ -27,23 +27,24 @@ public class CryptoFsClientStreamProvider extends FilesystemClientStreamProvider
 
 
 	@Override
-	public InputStream getSendFileStream() throws  ProviderStreamGenerationException {
-		InputStream is = super.getSendFileStream();
+	public OutputStream getFilterOutputStoreStream(OutputStream output) throws ProviderStreamGenerationException {
 		try {
-			return cryptoUtil.getInputStream(is);
-		} catch (InvalidKeyException | InvalidAlgorithmParameterException | IOException e) {
-			throw new ProviderStreamGenerationException("Error generating Crypto Input Exception "+e.getMessage(),e);
-		}
-	}
-
-	@Override
-	public OutputStream getRecieveFileStream() throws ProviderStreamGenerationException {
-		OutputStream os = super.getRecieveFileStream();
-		try {
-			return cryptoUtil.getOutputStream(os);
+			return cryptoUtil.getOutputStream( super.getFilterOutputStoreStream(output));
 		} catch (InvalidKeyException  | IOException e) {
 			throw new ProviderStreamGenerationException("Error generating Crypto output Exception "+e.getMessage(),e);
 		}
 	}
+	
+	@Override
+	public InputStream getFilterRecieveNetwordStream(InputStream input) throws ProviderStreamGenerationException {
+		try {
+			return cryptoUtil.getInputStream(super.getFilterRecieveNetwordStream(input));
+		} catch (InvalidKeyException | InvalidAlgorithmParameterException | IOException e) {
+			throw new ProviderStreamGenerationException("Error generating Crypto Input Exception "+e.getMessage(),e);
+		}
+	}
+	
+
+
 
 }

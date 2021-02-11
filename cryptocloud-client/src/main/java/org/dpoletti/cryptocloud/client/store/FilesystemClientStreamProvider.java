@@ -29,7 +29,7 @@ public class FilesystemClientStreamProvider implements ClientStreamProvider {
 
 
 	@Override
-	public InputStream getSendFileStream() throws ProviderStreamGenerationException {
+	public InputStream getInputStoreStream() throws ProviderStreamGenerationException {
 		try {
 			return new FileInputStream(path.toFile());
 		} catch (FileNotFoundException e) {
@@ -37,7 +37,7 @@ public class FilesystemClientStreamProvider implements ClientStreamProvider {
 		}
 	}
 	@Override
-	public OutputStream getRecieveFileStream() throws ProviderStreamGenerationException {
+	public OutputStream getOutputNetworkStream() throws ProviderStreamGenerationException {
 		try {
 			return new FileOutputStream(path.toFile());
 		} catch (FileNotFoundException e) {
