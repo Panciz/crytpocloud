@@ -18,8 +18,9 @@ public class SimpleServer {
 		
 		
 		Path destDir = Paths.get(args[0]);
-		Files.createDirectories(destDir);
-		
+		if(!destDir.toFile().exists()) {
+			Files.createDirectories(destDir);
+		}
 		//TODO dest validation
 		logger.info("FileServer Listen to port 9000 destDir "+destDir);
 

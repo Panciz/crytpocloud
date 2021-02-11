@@ -58,20 +58,18 @@
 					<verbose>true</verbose>
 					<images>
 						<image>
-							<name>pancix/${project.name}:${project.version}</name>
-							<alias>articoli</alias>
+							<name>${project.name}:${project.version}</name>
+							<alias>crytpocloud-server</alias>
 							<build>
 								<from>openjdk:8-jdk-alpine</from>
-
-								<maintainer>Davide Poletti@xantrix.it</maintainer>
+	
+								<maintainer>Davide Poletti</maintainer>
 								
 								<ports>
 									<port>5051</port>
 								</ports>
 
-								<volumes>
-									<volume>/tmp/</volume>
-								</volumes>
+				
 
 								<entryPoint>
 									<exec>
@@ -79,7 +77,8 @@
 										<arg>-jar</arg>
 										<arg>-Xmx96m</arg>
 										<arg>-Xss512k</arg>
-										<arg>${project.name}-${project.version}.jar /tmp/critpocloud</arg>
+										<arg>${project.name}-${project.version}.jar</arg>
+										<arg>/tmp/crytpocloud</arg>
 									</exec>
 								</entryPoint>  
 
@@ -88,30 +87,21 @@
 									<targetDir>/</targetDir>
 									<descriptorRef>artifact</descriptorRef>
 								</assembly>
-
+						
 							</build>
+							<run>
+								<volumes>
+									<bind>
+										<volume>/tmp:/tmp</volume>
+									</bind>
+								</volumes>
+								<ports>9000:9000</ports>
+								<namingStrategy>alias</namingStrategy>
+							</run>
 						</image>
 					</images>
 				</configuration>
-				<executions>
-					 <execution>
-						  <id>start</id>
-						  <phase>pre-integration-test</phase>
-						  <goals>
-							  <goal>stop</goal>
-							  <goal>build</goal>
-							  <goal>start</goal>
-						  </goals>
-					 </execution>
-					 <execution>
-						 <id>push</id>
-						 <phase>post-integration-test</phase>
-						 <goals>
-							 <goal>stop</goal>
-							 <goal>push</goal>
-						 </goals>
-					 </execution>
-				</executions>
+			
 			</plugin>
 		</plugins>
 	</build>

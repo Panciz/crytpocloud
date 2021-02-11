@@ -73,6 +73,7 @@ public class CryptoFileRequestHandler implements Runnable {
 			switch(rh.getOpType()) {
 			case PUT:
 					long totalSize = recieveFile(bis,rh);
+					//FIXME Not managed by the client
 					out.println(ProtocolMessages.END_OK_MSG);
 					logger.debug(rh+" receive succesfully: "+totalSize+" bytes");
 					outprovider.endTransmissionSuccess(rh, totalSize);
