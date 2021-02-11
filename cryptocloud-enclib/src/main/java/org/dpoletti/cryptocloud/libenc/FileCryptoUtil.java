@@ -31,7 +31,7 @@ public class FileCryptoUtil {
 
 	private SecretKey secretKey;
 	private Cipher cipher;
-	private static final String CIPHER_CONF = "AES/CBC/PKCS5Padding";
+	private static final String CIPHER_CONF = "AES/CBC/PKCS7Padding";
 	private static final String BOUNCY_PROVIDER = "BC";
 	private static final String KEY_ALGORITM = "AES";
 
