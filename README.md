@@ -4,10 +4,10 @@ Simple solution to load and  unload encrypted file to a remote host.
 
 It's compose of two main applications.
 
-The `cryptocloud-server` that receive and store the files in the filesystem.
-The `cryptocloud-client` that crypt and send the files to the server. The tool can be used also without encryption.
+The `cryptocloud-server` that receives and it stores the files in the filesystem.
+The `cryptocloud-client` that crypts and it sends the files to the server. The tool can be used also without encryption.
 
-The two applications are simple command line tools but the jars can be integrated as external jars in a bigger implementation.
+The two applications are simple command line tools but the jars can be integrated as external jars.
 
 The `cryptocloud-core-lib` jar contains classes common to the two project.
 The `cryptocloud-encliv` jar contains the logic to provide stream encryption. 
