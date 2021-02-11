@@ -2,6 +2,7 @@
 
 Client application that allows the user to encrypt and upload and to download and to decrypt it.
 
+To the the client run the server on port 9000
 
 # No encrypt version
 
@@ -48,7 +49,6 @@ rm testdir/recf/*
 rm testdir/enc.key
 ```
 
-# TODO
 
-Improve command line input and use properties for some values
+
 
