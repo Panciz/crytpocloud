@@ -40,6 +40,8 @@ Algorithm: AES
 Cipher mode: CBC
 Padding mode: PKCS7
 
+I use the BouncyCastle library implementation.
+
 In case of a PUT operation the key is generated if not provided by the user.
 
 I didn't use a 256 bit key to be able to run the project on Java8 without any particular configuration required to use a bigger key.
