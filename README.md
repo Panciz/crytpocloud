@@ -110,7 +110,6 @@ This is a list of relevant improvement
 
 ### Server
 
-- Use directory information to store the file. At the moment the users can overwrite the files each other!
 - Use database to store files and log file activity. This can be done by implement a different 
 - provide the user the possibility to receive a list of existing file.
 - Allows server port and listen address configuration
