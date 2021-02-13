@@ -56,7 +56,7 @@ public class StoreFileOutputStreamProvider implements StoreOutputProvider{
 	@Override
 	public InputStream getStoreInputStream(RequestHeader rh) throws StoreException  {
 		try {
-			Path readFile = Paths.get(destDir.toFile().getAbsolutePath()+File.separator+rh.getFilename());
+			Path readFile = Paths.get(destDir.toString(),rh.getUsername(),rh.getFilename());
 			logger.debug("delivering file  "+readFile.toAbsolutePath());
 			return new FileInputStream(readFile.toFile());
 			
@@ -68,13 +68,19 @@ public class StoreFileOutputStreamProvider implements StoreOutputProvider{
 	}
 	@Override
 	public void endTransmissionSuccess(RequestHeader rh, long fileZise) throws StoreException {
-		
-		String destFile = destDir.toFile().getAbsolutePath()+File.separator+rh.getFilename();
 		try {
+			Path destUserDir = Paths.get(destDir.toString(),rh.getUsername());
+			if(!destUserDir.toFile().exists()) {
+				Files.createDirectories(destUserDir);
+				
+			}
+			
+			Path destFile = Paths.get(destUserDir.toString(),rh.getFilename());
+			
 			logger.debug("Movind file to "+destFile);
-			Files.move(tempFile,Paths.get(destFile),REPLACE_EXISTING,ATOMIC_MOVE );
+			Files.move(tempFile,destFile,REPLACE_EXISTING,ATOMIC_MOVE );
 		} catch (IOException e) {
-			throw new StoreException(rh+"Error saving dest file "+destFile,e.getCause());
+			throw new StoreException(rh+"Error saving file to final dest "+e.getMessage(),e.getCause());
 		}
 		
 	}
