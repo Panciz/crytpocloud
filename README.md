@@ -98,6 +98,12 @@ Notice that the key is generated if not present.
 cryptocloud-client/client.sh PUT cryptocloud-client/testdir/sendf/test-image.jpg dpoletti 127.0.0.1 9000 cryptocloud-client/testdir/enc.key
 ```
 
+and to retrieve it
+
+```
+cryptocloud-client/client.sh GET /tmp/test-image.jpg dpoletti 127.0.0.1 9000 cryptocloud-client/testdir/enc.key
+```
+
 In order to run a complete set op test use 
 
 ```
@@ -105,7 +111,6 @@ sh cryptocloud-client/run-test.sh
 ```
 
 ## Web Interface Version
-
 
 The `spring-server` is a spring boot application built upon the cryptocloud server library. It provides a service to retrieve the list of uploaded file.
  In order to keep the list of the uploaded files it use a In-memory h2 database. 
@@ -131,8 +136,8 @@ Then is possible to run the server, in this example I specify the directory wher
 $ java -jar cryptocloud-springserver/target/springserver-0.0.1-SNAPSHOT.jar --crypto.destdir=/tmp/cryptocloud --crypto.port=9001 --server.port=8081
 ```
 
-The client can be run in a separete terminal with this command. It will listen on port `server.port` using `crypto.keyfile`  as key file.
-Obviously the port `cryptoserver.port` and `cryptoserver.restport` must concide with the ones specified in the previous command.
+The client can be run in a separate terminal with this command. It will listen on port `server.port` using `crypto.keyfile`  as key file.
+Obviously the port `cryptoserver.port` and `cryptoserver.restport` must coincide with the ones specified in the previous command.
 
 ```
 java -jar cryptocloud-springclient/target/springclient-0.0.1-SNAPSHOT.jar --crypto.keyfile=/tmp/key.enc --cryptoserver.host=127.0.0.1 --cryptoserver.port=9001 --cryptoserver.restport=8081 --server.port=8082
@@ -144,14 +149,14 @@ The client interface will be available at
 http://localhost:8082/index?username=springtest
 ```
 
-Notice that the userame is passed as parameter.
+Notice that the username is passed as parameter.
 
 In order to encrypt and upload the file use the form in the left. The full localfile path must be specified.
 
 ![Upload file](image/screen_upload.png)
 
-Refreshing the page once the file is uploaded it will be shown in the list on the right.
-It it possible specify a download path and click on the filename to download and decrypt it.
+Refreshing the page once the file is uploaded, it should appears in the list on the right.
+It's possible specify a download path and click on the filename to download and decrypt it.
 
 ![Download file](image/screen_download.png)
 
