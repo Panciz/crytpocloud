@@ -20,18 +20,35 @@ $.ajaxSetup({
 	  contentType: "application/json; charset=utf-8"
 	});
 /*<![CDATA[*/
+	
+$(function() { 
+	
+	 $("#success").hide();
+	 $("#error").hide()
+	
+});
+
 function onGet(filename) {
 	
 	var request={};
 	request.username=[[${username}]];
 	request.filename=$('#downloadDirectory').val()+filename;
    	console.log(JSON.stringify(request));
-   	$.post('/file/get',JSON.stringify(request),function(data){
-   	
-   	    $("#successget").toggleClass('in out'); 
-   		
-   	},'json');
+   	$.post('/file/get',JSON.stringify(request))
+   	 .done(function( data ) {
+   		 	console.log('success');
+    	    $("#success").hide().show('medium');
+    	    $("#success").text("Download file "+request.filename+" started!")
+    	    setTimeout(function(){  $("#success").hide();}, 3000);
+
+ 	 }).fail(function (jqXHR, textStatus) {
+ 		console.log('error');
+	    $("#error").hide().show('medium');
+	    $("#error").text("Download file "+result.filename+" error! status "+textStatus);
+	    setTimeout(function(){  $("#error").hide();}, 3000);
+	   });
 }
+
 /*]]>*/
 </script>
 <body>
@@ -42,30 +59,30 @@ function onGet(filename) {
 			User <span class="badge bg-primary" th:text="${username}"></span>
 			using key <span class="badge bg-info text-dark" th:text="${key}"></span>
 		</p>
+		<div class="row">
+			<div class="col-12">
+				<div class="col-6 alert alert-success alert-dismissable" id="success">
+				</div>
+				<div class="col-6 alert alert-dangeer alert-dismissable" id="error">
 
-		<div class="row col-4">
-			<p class="badge bg-light text-dark">Download from cloud</p>
-			<div class="col-12" style="margin-bottom: 10px;">
-				<label for="exampleInputEmail1" class="form-label">Download
-					Directory</label> <input type="text" class="form-control" value="/Users/panci/Desktop/"
-					placeholder="/tmp/" id="downloadDirectory">
+				</div>
 			</div>
-			<div class="col-12 list-group" th:each="file: ${files}">
-				<button th:onclick="onGet([[${file.filename}]]);"
-					class="list-group-item list-group-item-action">
-					<p th:text="${file.filename}" />
-				</button>
+			<div class=" col-4">
+				<p class="badge bg-light text-dark">Download from cloud</p>
+				<div class="col-12" style="margin-bottom: 10px;">
+					<label for="exampleInputEmail1" class="form-label">Download
+						Directory</label> <input type="text" class="form-control"
+						value="/Users/panci/Desktop/" placeholder="/tmp/"
+						id="downloadDirectory">
+				</div>
+				<div class="col-12 list-group" th:each="file: ${files}">
+					<button th:onclick="onGet([[${file.filename}]]);"
+						class="list-group-item list-group-item-action">
+						<p th:text="${file.filename}" />
+					</button>
+				</div>
 			</div>
-		</div>
-		<div class="row col-2">
-			<div class="alert alert-success fade out" id="successget">
-				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				File Download Started
-			</div>
-			<div class="alert alert-dangeer fade out" id="errorget">
-				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				File Download Error
-			</div>
+
 		</div>
 	</div>
 </body>
