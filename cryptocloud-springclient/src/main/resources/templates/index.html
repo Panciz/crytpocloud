@@ -49,6 +49,27 @@ function onGet(filename) {
 	   });
 }
 
+function onPut() {
+	
+	var request={};
+	request.username=[[${username}]];
+	request.filename=$('#uploadFile').val();
+   	console.log(JSON.stringify(request));
+   	$.post('/file/put',JSON.stringify(request))
+   	 .done(function( data ) {
+   		 	console.log('success');
+    	    $("#success").hide().show('medium');
+    	    $("#success").text("Upload file "+request.filename+" started!")
+    	    setTimeout(function(){  $("#success").hide();}, 3000);
+
+ 	 }).fail(function (jqXHR, textStatus) {
+ 		console.log('error');
+	    $("#error").hide().show('medium');
+	    $("#error").text("Upload file "+result.filename+" error! status "+textStatus);
+	    setTimeout(function(){  $("#error").hide();}, 3000);
+	   });
+}
+
 /*]]>*/
 </script>
 <body>
@@ -67,14 +88,15 @@ function onGet(filename) {
 
 				</div>
 			</div>
-			<div class=" col-4">
+			<div class=" col-5">
 				<p class="badge bg-light text-dark">Download from cloud</p>
 				<div class="col-12" style="margin-bottom: 10px;">
 					<label for="exampleInputEmail1" class="form-label">Download
 						Directory</label> <input type="text" class="form-control"
-						value="/Users/panci/Desktop/" placeholder="/tmp/"
+						 placeholder="/tmp/"
 						id="downloadDirectory">
 				</div>
+				<p class="badge bg-light text-dark">File Available</p>
 				<div class="col-12 list-group" th:each="file: ${files}">
 					<button th:onclick="onGet([[${file.filename}]]);"
 						class="list-group-item list-group-item-action">
@@ -82,7 +104,17 @@ function onGet(filename) {
 					</button>
 				</div>
 			</div>
+			<div class=" col-5">
+				<p class="badge bg-light text-dark">Upload to cloud</p>
+				<div class="col-12" style="margin-bottom: 10px;">
+					<label for="exampleInputEmail1" class="form-label">Upload File</label> 
+					<input type="text" class="form-control" placeholder="/fullpath/fileToUpload.txt"
+						id="uploadFile">
+				</div>
+				<div class="col-12">
+					<button type="button"  class="btn btn-primary"  onclick="onPut()">Upload</button>
 
+				</div>
 		</div>
 	</div>
 </body>
