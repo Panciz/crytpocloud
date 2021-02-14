@@ -24,11 +24,11 @@ public class CryptoClientController {
 	@Value("${cryptoserver.restport}")
 	private int port;
 	
-	@PutMapping
+	@PutMapping("/file")
 	public void postCommand(@RequestBody CryptoCommand operation) throws ProviderGenerationException {
 		clientWrapper.executeOperation(OperationType.PUT, operation.getUsername(), operation.getFilename());
 	}
-	@GetMapping
+	@GetMapping("/file")
 	public void getCommand(@RequestBody CryptoCommand operation) throws ProviderGenerationException {
 		clientWrapper.executeOperation(OperationType.GET, operation.getUsername(), operation.getFilename());
 	}

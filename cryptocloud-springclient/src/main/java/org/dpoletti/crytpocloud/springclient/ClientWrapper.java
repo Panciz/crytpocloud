@@ -41,7 +41,7 @@ public class ClientWrapper {
 	private ExecutorService pool = Executors.newFixedThreadPool(10);
 
 	@PostConstruct
-	public void init() throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, IOException {
+	public void init()  {
 
 		File keyFile = Paths.get(keyfile).toFile();
 		logger.info("Using encription key " + keyFile.getAbsolutePath());
