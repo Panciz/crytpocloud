@@ -104,17 +104,14 @@ In order to run a complete set op test use
 sh cryptocloud-client/run-test.sh
 ```
 
+## Spring Server
+
+The `spring-server` provide a spring boot application built upon the cryptocloud server library. It provides a service to retrieve the list of uploaded file.
+
+
 ## Improvement
 
 This is a list of relevant improvement
-
-### Server
-
-- Use database to store files and log file activity. This can be done by implement a different 
-- provide the user the possibility to receive a list of existing file.
-- Allows server port and listen address configuration
-
-### Client
 
 - Improve command line interface.
 - Use properties file to store configuration `org.dpoletti.cryptocloud.server.store.StoreOutputProvider`
