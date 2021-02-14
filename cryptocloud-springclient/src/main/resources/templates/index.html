@@ -44,7 +44,7 @@ function onGet(filename) {
  	 }).fail(function (jqXHR, textStatus) {
  		console.log('error');
 	    $("#error").hide().show('medium');
-	    $("#error").text("Download file "+result.filename+" error! status "+textStatus);
+	    $("#error").text("Download file "+request.filename+" error! status "+textStatus);
 	    setTimeout(function(){  $("#error").hide();}, 3000);
 	   });
 }
@@ -65,7 +65,7 @@ function onPut() {
  	 }).fail(function (jqXHR, textStatus) {
  		console.log('error');
 	    $("#error").hide().show('medium');
-	    $("#error").text("Upload file "+result.filename+" error! status "+textStatus);
+	    $("#error").text("Upload file "+request.filename+" error! status "+textStatus);
 	    setTimeout(function(){  $("#error").hide();}, 3000);
 	   });
 }
