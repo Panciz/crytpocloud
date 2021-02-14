@@ -8,6 +8,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.dpoletti.cryptocloud.server.store.StoreOutputProviderFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /***
  *
@@ -19,7 +21,13 @@ import org.dpoletti.cryptocloud.server.store.StoreOutputProviderFactory;
  */
 public class CryptoCloudFileServer {
 
+	
+
+	private static final Logger logger 
+	  = LoggerFactory.getLogger(CryptoCloudFileServer.class);
 	// Limit the number of active connections
+	
+	
 	private static final int MAX_ACTIVE_CONNECTIONS = 100;
 	private final int port;
 
@@ -54,7 +62,12 @@ public class CryptoCloudFileServer {
 			running = false;
 			throw new ServerException("Error starting file server ", e);
 		}
+		logger.info("Crypto server stopped");
 
+	}
+	
+	public void stopServer() {
+		running=false;
 	}
 
 }

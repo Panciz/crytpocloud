@@ -4,7 +4,7 @@ import java.nio.file.Path;
 
 public class StoreFileOutputProviderFactory implements StoreOutputProviderFactory {
 
-	private final  Path destDir;
+	protected final  Path destDir;
 	
 	public StoreFileOutputProviderFactory(Path destDir) {
 		
