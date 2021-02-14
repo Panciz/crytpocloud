@@ -1,12 +1,9 @@
 package org.dpoletti.cryptocloud.springserver.core;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.dpoletti.cryptocloud.server.store.StoreFileOutputProviderFactory;
-import org.dpoletti.cryptocloud.server.store.StoreOutputProviderFactory;
 import org.dpoletti.cryptocloud.springserver.model.UserFileService;
-import org.springframework.stereotype.Component;
 
 public class HibStoreFileOutputProviderFactory extends StoreFileOutputProviderFactory {
 

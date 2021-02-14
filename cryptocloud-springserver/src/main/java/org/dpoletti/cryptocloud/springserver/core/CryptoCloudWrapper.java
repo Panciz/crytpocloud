@@ -7,13 +7,11 @@ import java.nio.file.Paths;
 import java.rmi.ServerException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.dpoletti.cryptocloud.server.CryptoCloudFileServer;
-import org.dpoletti.cryptocloud.server.store.StoreFileOutputProviderFactory;
 import org.dpoletti.cryptocloud.springserver.model.UserFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

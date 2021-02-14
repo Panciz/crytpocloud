@@ -3,7 +3,6 @@ package org.dpoletti.cryptocloud.springserver.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
