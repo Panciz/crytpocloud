@@ -19,9 +19,7 @@ public class UserFileService {
 	@Autowired
 	UserFileRepository repository;
 	
-	@Autowired
-	EntityManager em;
-	
+
 	List<UserFile> getFilesByUser(String username){
 		return repository.findByUsername(username);
 	}
@@ -44,8 +42,8 @@ public class UserFileService {
 			newUserFile.setFilename(fileName);
 			newUserFile.setUsername(username);
 			newUserFile.setLastupdate(new Date());
-			 em.persist(newUserFile);
-			 return repository.findFirstByUsernameAndFilename(username, fileName);
+		
+			 return repository.save(newUserFile);
 		}
 		
 	}
